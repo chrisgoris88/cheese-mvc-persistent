@@ -1,14 +1,14 @@
 package org.launchcode.models;
 
+import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/**
- * Created by LaunchCode
- */
+import java.util.List;
+
 @Entity
 public class Cheese {
 
@@ -17,14 +17,18 @@ public class Cheese {
     private int id;
 
     @NotNull
-    @Size(min=3, max=15)
+    @Size(min=3, max=15, message="Name must be between 3 and 15 characters!")
     private String name;
 
     @NotNull
     @Size(min=1, message = "Description must not be empty")
     private String description;
 
-    private CheeseType type;
+    @ManyToOne
+    private Category category;
+
+    @ManyToMany(mappedBy = "cheeses")
+    private List<Menu> menus;
 
     public Cheese(String name, String description) {
         this.name = name;
@@ -33,13 +37,9 @@ public class Cheese {
 
     public Cheese() { }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
     public void setName(String name) {
         this.name = name;
@@ -53,11 +53,7 @@ public class Cheese {
         this.description = description;
     }
 
-    public CheeseType getType() {
-        return type;
-    }
+    public Category getCategory() { return category; }
 
-    public void setType(CheeseType type) {
-        this.type = type;
-    }
+    public void setCategory(Category category) { this.category = category; }
 }
